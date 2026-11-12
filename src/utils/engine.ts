@@ -221,28 +221,127 @@ export function buildDefaultSections(
   const email = brand.email || 'contact@brand.vn';
   const address = brand.address || 'Tầng 12, Tòa nhà Diamond, Quận 1, TP. Hồ Chí Minh';
 
-  // Customize headings & style depending on replication level
-  let heroTitle = `Giải Pháp Đột Phá Cùng ${brandName}`;
-  let heroSubtitle = `Nâng tầm thương hiệu với hệ thống hiện đại, tối ưu trải nghiệm và dẫn đầu thị trường.`;
+  // Customize headings & style depending on replication level and brand essentials
+  let heroTitle = brand.tagline ? `${brandName} - ${brand.tagline}` : `Giải Pháp Đột Phá Cùng ${brandName}`;
+  let heroSubtitle = brand.mission || `Nâng tầm thương hiệu với hệ thống hiện đại, tối ưu trải nghiệm và dẫn đầu thị trường.`;
   let badgeText = 'Khám Phá Thế Hệ Mới';
 
   if (level === 1) {
-    heroTitle = `${brandName} - Uy Tín & Chất Lượng Vượt Trội`;
+    heroTitle = brand.tagline ? `${brandName} - ${brand.tagline}` : `${brandName} - Uy Tín & Chất Lượng Vượt Trội`;
     badgeText = 'Bản Tái Tạo Chuẩn Xác';
   } else if (level === 2) {
-    heroTitle = `Khẳng Định Phong Cách Doanh Nghiệp Với ${brandName}`;
+    heroTitle = brand.tagline ? `${brandName} - ${brand.tagline}` : `Khẳng Định Phong Cách Doanh Nghiệp Với ${brandName}`;
     badgeText = 'Thiết Kế Tinh Tế';
   } else if (level === 3) {
-    heroTitle = `Tăng Trưởng Bền Vững Cùng Hệ Sinh Thái ${brandName}`;
+    heroTitle = brand.tagline ? `${brandName} - ${brand.tagline}` : `Tăng Trưởng Bền Vững Cùng Hệ Sinh Thái ${brandName}`;
     badgeText = 'Công Nghệ AI Tối Ưu Hóa';
   } else if (level === 4) {
-    heroTitle = `Định Hình Tương Lai Ngành Dịch Vụ - ${brandName}`;
+    heroTitle = brand.tagline ? `${brandName} - ${brand.tagline}` : `Định Hình Tương Lai Ngành Dịch Vụ - ${brandName}`;
     badgeText = 'Sáng Tạo Độc Bản';
   } else if (level === 5) {
-    heroTitle = `Kỷ Nguyên Mới Cho Trải Nghiệm Khách Hàng`;
-    heroSubtitle = `${brandName} kiến tạo chuẩn mực mới với nền tảng trí tuệ nhân tạo thế hệ tiếp theo.`;
+    heroTitle = brand.tagline ? `${brandName} - ${brand.tagline}` : `Kỷ Nguyên Mới Cho Trải Nghiệm Khách Hàng`;
+    heroSubtitle = brand.mission || `${brandName} kiến tạo chuẩn mực mới với nền tảng trí tuệ nhân tạo thế hệ tiếp theo.`;
     badgeText = 'Đột Phá Toàn Diện';
   }
+
+  // Generate dynamic feature items from user's key strengths if provided
+  const featureItems = (brand.keyStrengths && brand.keyStrengths.filter(Boolean).length > 0)
+    ? brand.keyStrengths.filter(Boolean).map((strength, index) => {
+        const icons = ['Zap', 'ShieldCheck', 'Sparkles', 'Smartphone', 'BarChart3', 'Headphones'];
+        return {
+          icon: icons[index % icons.length],
+          title: strength.length > 35 ? strength.substring(0, 35) + '...' : strength,
+          description: strength,
+        };
+      })
+    : [
+        {
+          icon: 'Zap',
+          title: 'Tốc Độ Xử Lý Siêu Tốc',
+          description: 'Tối ưu hóa thời gian tải trang dưới 0.8 giây, gia tăng tỷ lệ chuyển đổi đơn hàng vượt trội.',
+        },
+        {
+          icon: 'ShieldCheck',
+          title: 'Bảo Mật Tiêu Chuẩn Quốc Tế',
+          description: 'Mã hóa SSL 256-bit đa tầng, tường lửa thông minh bảo vệ tuyệt đối dữ liệu khách hàng.',
+        },
+        {
+          icon: 'Sparkles',
+          title: 'Trí Tuệ Nhân Tạo Tự Động',
+          description: 'Tự động cá nhân hóa giao diện và thông điệp tiếp cận phù hợp với từng phân khúc người dùng.',
+        },
+        {
+          icon: 'Smartphone',
+          title: 'Tối Ưu 100% Trên Di Động',
+          description: 'Hiển thị hoàn hảo trên mọi kích thước màn hình từ iPhone, iPad đến màn hình lớn 4K.',
+        },
+        {
+          icon: 'BarChart3',
+          title: 'Báo Cáo & Phân Tích Chuyên Sâu',
+          description: 'Theo dõi hành vi người dùng, biểu đồ trực quan hóa dữ liệu theo thời gian thực.',
+        },
+        {
+          icon: 'Headphones',
+          title: 'Đồng Hành Cùng Chuyên Gia',
+          description: 'Đội ngũ kỹ thuật hỗ trợ trực tiếp qua Zalo, Hotline và Email sẵn sàng 24/7.',
+        },
+      ];
+
+  // Generate dynamic pricing plans from user's core products if provided
+  const pricingPlans = (brand.coreProducts && brand.coreProducts.filter((p) => p.name?.trim()).length > 0)
+    ? brand.coreProducts.filter((p) => p.name?.trim()).map((product, index) => ({
+        name: product.name,
+        price: product.price || 'Liên hệ',
+        period: '',
+        description: product.description || 'Dịch vụ tiêu chuẩn đáp ứng nhu cầu doanh nghiệp',
+        features: [
+          'Chính sách bảo hành và cam kết',
+          'Tư vấn và hỗ trợ kỹ thuật chuyên sâu',
+          'Miễn phí triển khai và hướng dẫn',
+        ],
+        popular: index === 0,
+        ctaText: brand.primaryCta || 'Chọn Gói',
+      }))
+    : [
+        {
+          name: 'Khởi Nghiệp (Starter)',
+          price: '1.990.000 đ',
+          period: '/tháng',
+          description: 'Phù hợp cho cá nhân kinh doanh & cửa hàng mới thành lập',
+          features: ['1 Tên miền riêng', 'Băng thông không giới hạn', 'SSL miễn phí trọn đời', 'Hỗ trợ kỹ thuật giờ hành chính'],
+          popular: false,
+          ctaText: brand.primaryCta || 'Đăng Ký Gói',
+        },
+        {
+          name: 'Tăng Trưởng (Growth Pro)',
+          price: '3.990.000 đ',
+          period: '/tháng',
+          description: 'Giải pháp hoàn hảo cho doanh nghiệp muốn tăng tốc doanh thu',
+          features: [
+            'Tất cả tính năng của gói Starter',
+            'AI Marketing tự động hóa',
+            'Tích hợp Zalo Mini App & Hotline',
+            'Sao lưu dữ liệu hàng ngày',
+            'Chuyên viên hỗ trợ ưu tiên 24/7',
+          ],
+          popular: true,
+          ctaText: brand.primaryCta || 'Chọn Gói Thịnh Hành',
+        },
+        {
+          name: 'Độc Quyền (Enterprise)',
+          price: 'Liên hệ',
+          period: '',
+          description: 'Tùy biến cao cấp theo yêu cầu đặc thù của tập đoàn',
+          features: [
+            'Hạ tầng máy chủ chuyên dụng',
+            'Cam kết SLA 99.99%',
+            'Tùy chỉnh mã nguồn 100%',
+            'Đào tạo nhân sự tận nơi',
+          ],
+          popular: false,
+          ctaText: 'Yêu Cầu Báo Giá',
+        },
+      ];
 
   return [
     {
@@ -261,8 +360,10 @@ export function buildDefaultSections(
           { label: 'Đánh giá', href: '#testimonials' },
           { label: 'Liên hệ', href: '#contact' },
         ],
-        ctaText: 'Tư Vấn Miễn Phí',
+        ctaText: brand.primaryCta || 'Tư Vấn Miễn Phí',
         ctaPhone: phone,
+        hasZaloWidget: Boolean(brand.zaloNumber),
+        zaloNumber: brand.zaloNumber,
       },
     },
     {
@@ -275,8 +376,8 @@ export function buildDefaultSections(
         badge: badgeText,
         title: heroTitle,
         subtitle: heroSubtitle,
-        ctaPrimary: 'Bắt Đầu Ngay',
-        ctaSecondary: 'Xem Video Giới Thiệu',
+        ctaPrimary: brand.primaryCta || 'Bắt Đầu Ngay',
+        ctaSecondary: brand.zaloNumber ? `Zalo: ${brand.zaloNumber}` : 'Xem Video Giới Thiệu',
         heroImage: analysis.screenshotUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80',
         stats: [
           { value: '99.8%', label: 'Độ hài lòng của đối tác' },
@@ -289,41 +390,10 @@ export function buildDefaultSections(
       id: 'sec-features',
       type: 'features',
       title: 'Tính Năng Nổi Bật',
-      subtitle: 'Trải nghiệm đỉnh cao với các giải pháp được thiết kế riêng biệt',
+      subtitle: brand.tagline ? `Được phát triển riêng biệt cho mục tiêu của ${brandName}` : 'Trải nghiệm đỉnh cao với các giải pháp được thiết kế riêng biệt',
       order: 3,
       content: {
-        items: [
-          {
-            icon: 'Zap',
-            title: 'Tốc Độ Xử Lý Siêu Tốc',
-            description: 'Tối ưu hóa thời gian tải trang dưới 0.8 giây, gia tăng tỷ lệ chuyển đổi đơn hàng vượt trội.',
-          },
-          {
-            icon: 'ShieldCheck',
-            title: 'Bảo Mật Tiêu Chuẩn Quốc Tế',
-            description: 'Mã hóa SSL 256-bit đa tầng, tường lửa thông minh bảo vệ tuyệt đối dữ liệu khách hàng.',
-          },
-          {
-            icon: 'Sparkles',
-            title: 'Trí Tuệ Nhân Tạo Tự Động',
-            description: 'Tự động cá nhân hóa giao diện và thông điệp tiếp cận phù hợp với từng phân khúc người dùng.',
-          },
-          {
-            icon: 'Smartphone',
-            title: 'Tối Ưu 100% Trên Di Động',
-            description: 'Hiển thị hoàn hảo trên mọi kích thước màn hình từ iPhone, iPad đến màn hình lớn 4K.',
-          },
-          {
-            icon: 'BarChart3',
-            title: 'Báo Cáo & Phân Tích Chuyên Sâu',
-            description: 'Theo dõi hành vi người dùng, biểu đồ trực quan hóa dữ liệu theo thời gian thực.',
-          },
-          {
-            icon: 'Headphones',
-            title: 'Đồng Hành Cùng Chuyên Gia',
-            description: 'Đội ngũ kỹ thuật hỗ trợ trực tiếp qua Zalo, Hotline và Email sẵn sàng 24/7.',
-          },
-        ],
+        items: featureItems,
       },
     },
     {
@@ -335,16 +405,16 @@ export function buildDefaultSections(
       content: {
         items: [
           {
-            name: 'Gói Chuyên Nghiệp (Professional)',
-            category: 'Doanh Nghiệp Vừa & Nhỏ',
+            name: (brand.coreProducts && brand.coreProducts[0]?.name) || 'Gói Chuyên Nghiệp (Professional)',
+            category: brand.industry || 'Doanh Nghiệp Vừa & Nhỏ',
             image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
-            desc: 'Bộ công cụ toàn diện giúp doanh nghiệp tự tin bứt phá doanh thu trong 30 ngày.',
+            desc: (brand.coreProducts && brand.coreProducts[0]?.description) || 'Bộ công cụ toàn diện giúp doanh nghiệp tự tin bứt phá doanh thu trong 30 ngày.',
           },
           {
-            name: 'Hệ Sinh Thái Doanh Nghiệp (Enterprise)',
-            category: 'Tập Đoàn Đa Quốc Gia',
+            name: (brand.coreProducts && brand.coreProducts[1]?.name) || 'Hệ Sinh Thái Doanh Nghiệp (Enterprise)',
+            category: brand.industry || 'Tập Đoàn Đa Quốc Gia',
             image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&auto=format&fit=crop&q=80',
-            desc: 'Kiến trúc phân tán quy mô lớn, tích hợp hệ thống CRM, ERP và bảo mật chuyên biệt.',
+            desc: (brand.coreProducts && brand.coreProducts[1]?.description) || 'Kiến trúc phân tán quy mô lớn, tích hợp hệ thống CRM, ERP và bảo mật chuyên biệt.',
           },
         ],
       },
@@ -356,68 +426,29 @@ export function buildDefaultSections(
       subtitle: 'Lựa chọn gói dịch vụ tối ưu cho từng giai đoạn phát triển của bạn',
       order: 5,
       content: {
-        plans: [
-          {
-            name: 'Khởi Nghiệp (Starter)',
-            price: '1.990.000 đ',
-            period: '/tháng',
-            description: 'Phù hợp cho cá nhân kinh doanh & cửa hàng mới thành lập',
-            features: ['1 Tên miền riêng', 'Băng thông không giới hạn', 'SSL miễn phí trọn đời', 'Hỗ trợ kỹ thuật giờ hành chính'],
-            popular: false,
-            ctaText: 'Đăng Ký Gói',
-          },
-          {
-            name: 'Tăng Trưởng (Growth Pro)',
-            price: '3.990.000 đ',
-            period: '/tháng',
-            description: 'Giải pháp hoàn hảo cho doanh nghiệp muốn tăng tốc doanh thu',
-            features: [
-              'Tất cả tính năng của gói Starter',
-              'AI Marketing tự động hóa',
-              'Tích hợp Zalo Mini App & Hotline',
-              'Sao lưu dữ liệu hàng ngày',
-              'Chuyên viên hỗ trợ ưu tiên 24/7',
-            ],
-            popular: true,
-            ctaText: 'Chọn Gói Thịnh Hành',
-          },
-          {
-            name: 'Độc Quyền (Enterprise)',
-            price: 'Liên hệ',
-            period: '',
-            description: 'Tùy biến cao cấp theo yêu cầu đặc thù của tập đoàn',
-            features: [
-              'Hạ tầng máy chủ chuyên dụng',
-              'Cam kết SLA 99.99%',
-              'Tùy chỉnh mã nguồn 100%',
-              'Đào tạo nhân sự tận nơi',
-            ],
-            popular: false,
-            ctaText: 'Yêu Cầu Báo Giá',
-          },
-        ],
+        plans: pricingPlans,
       },
     },
     {
       id: 'sec-testimonials',
       type: 'testimonials',
       title: 'Khách Hàng Nói Gì Về Chúng Tôi',
-      subtitle: 'Hơn 5,000+ đối tác đã tin tưởng và nâng tầm vị thế thương hiệu',
+      subtitle: `Hơn 5,000+ đối tác đã tin tưởng và đồng hành cùng ${brandName}`,
       order: 6,
       content: {
         reviews: [
           {
             name: 'Nguyễn Hoàng Long',
-            role: 'Giám đốc Điều hành - TechCorp VN',
+            role: `Giám đốc Điều hành - Đối tác của ${brandName}`,
             avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
             comment: `Website được thiết kế chỉn chu vượt xa mong đợi. Giao diện sang trọng, tốc độ phản hồi cực nhanh giúp khách hàng tin tưởng ngay từ lần chạm đầu tiên!`,
             rating: 5,
           },
           {
             name: 'Trần Mai Linh',
-            role: 'Nhà sáng lập - Luxury Beauty Spa',
+            role: 'Trưởng phòng Phát triển Kinh doanh',
             avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80',
-            comment: `Chúng tôi đã tăng 140% lượng khách đặt lịch hẹn chỉ sau 2 tuần đưa website mới vào vận hành. Cực kỳ ưng ý và đề xuất cho bạn bè!`,
+            comment: `Chúng tôi đã tăng 140% lượng khách hàng tiềm năng chỉ sau 2 tuần đưa website mới vào vận hành. Cực kỳ ưng ý!`,
             rating: 5,
           },
         ],
@@ -431,9 +462,10 @@ export function buildDefaultSections(
       order: 7,
       content: {
         phone,
+        zaloNumber: brand.zaloNumber,
         email,
         address,
-        workingHours: 'Thứ Hai - Thứ Bảy: 08:00 - 18:00',
+        workingHours: brand.workingHours || 'Thứ Hai - Thứ Bảy: 08:00 - 18:00',
         formFields: ['Họ và tên', 'Số điện thoại', 'Email liên hệ', 'Nội dung tư vấn'],
       },
     },
@@ -444,15 +476,15 @@ export function buildDefaultSections(
       order: 8,
       content: {
         brandName,
-        tagline: `Nâng tầm vị thế doanh nghiệp cùng các giải pháp số tiên tiến.`,
+        tagline: brand.tagline || brand.mission || `Nâng tầm vị thế doanh nghiệp cùng các giải pháp số tiên tiến.`,
         phone,
         email,
         address,
         socials: [
-          { name: 'Facebook', url: '#' },
-          { name: 'Zalo', url: '#' },
-          { name: 'LinkedIn', url: '#' },
-          { name: 'YouTube', url: '#' },
+          { name: 'Facebook', url: brand.socialLinks?.facebook || '#' },
+          { name: 'Zalo', url: brand.socialLinks?.zalo || '#' },
+          { name: 'TikTok', url: brand.socialLinks?.tiktok || '#' },
+          { name: 'YouTube', url: brand.socialLinks?.youtube || '#' },
         ],
         copyright: `© ${new Date().getFullYear()} ${brandName}. Bảo lưu mọi quyền.`,
       },

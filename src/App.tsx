@@ -15,15 +15,17 @@ import { CreateWizard } from './components/CreateWizard';
 import { BuildProgress } from './components/BuildProgress';
 import { PublishModal } from './components/PublishModal';
 import { PreviewModal } from './components/PreviewModal';
+import { WebsiteEssentialsView } from './components/WebsiteEssentialsView';
+import { AiBrainConnectView } from './components/AiBrainConnectView';
 import { ActivityLogItem, BrandInfo, Project, ReplicationLevel, WebsiteAnalysis } from './types';
 import { getInitialProjects } from './data/mockProjects';
-import { createProjectFromFlow } from './utils/engine';
+import { createProjectFromFlow, analyzeWebsiteBlueprint } from './utils/engine';
 import { generateProjectZip } from './utils/exportZip';
 import { CheckCircle2, AlertCircle, X } from 'lucide-react';
 
 export default function App() {
   // Navigation State
-  const [currentTab, setCurrentTab] = useState<'dashboard' | 'projects' | 'editor' | 'history' | 'settings'>('dashboard');
+  const [currentTab, setCurrentTab] = useState<'dashboard' | 'projects' | 'editor' | 'history' | 'settings' | 'essentials' | 'brain'>('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Projects State
@@ -216,6 +218,7 @@ export default function App() {
         <Header
           currentTab={currentTab}
           onOpenCreate={() => handleOpenCreateWizard()}
+          onSelectTab={(tab) => setCurrentTab(tab as any)}
           onToggleMobileMenu={() => setMobileMenuOpen(true)}
           activeProjectName={activeProject?.name}
         />
@@ -233,6 +236,30 @@ export default function App() {
               onOpenPreview={(p) => setPreviewModalProject(p)}
               onOpenPublish={(p) => setPublishModalProject(p)}
               onExportCode={handleExportZip}
+              onNavigateToBrain={() => setCurrentTab('brain')}
+              onNavigateToEssentials={() => setCurrentTab('essentials')}
+            />
+          )}
+
+          {currentTab === 'essentials' && (
+            <WebsiteEssentialsView
+              initialBrandInfo={activeProject?.brandInfo}
+              onSaveAndCreateWebsite={(brand) => {
+                const sample = `https://${brand.domain || 'example.com'}`;
+                const blueprint = analyzeWebsiteBlueprint(sample, brand.businessName);
+                const newProj = createProjectFromFlow(sample, 3, brand, blueprint);
+                setBuildingProject(newProj);
+                addActivityLog('Khởi tạo AI', `AI tự động tạo website từ Hồ sơ cơ bản cho ${newProj.name}`, newProj.name);
+                showToast(`Đang để AI tự động xây dựng website cho "${newProj.name}"...`, 'info');
+              }}
+              onNavigateToBrain={() => setCurrentTab('brain')}
+            />
+          )}
+
+          {currentTab === 'brain' && (
+            <AiBrainConnectView
+              onOpenCreateWizard={() => handleOpenCreateWizard()}
+              onNavigateToEssentials={() => setCurrentTab('essentials')}
             />
           )}
 

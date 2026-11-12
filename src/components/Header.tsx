@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Menu,
   Sparkles,
@@ -8,11 +7,14 @@ import {
   ShieldCheck,
   User,
   PlusCircle,
+  Brain,
+  FileCheck2,
 } from 'lucide-react';
 
 interface HeaderProps {
   currentTab: string;
   onOpenCreate: () => void;
+  onSelectTab?: (tab: string) => void;
   onToggleMobileMenu?: () => void;
   activeProjectName?: string;
 }
@@ -20,12 +22,15 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
   onOpenCreate,
+  onSelectTab,
   onToggleMobileMenu,
   activeProjectName,
 }) => {
   const tabTitles: Record<string, string> = {
     dashboard: 'Bảng Điều Khiển (Dashboard)',
     create: 'Quy Trình Tạo Website Tự Động',
+    essentials: 'Hồ Sơ Cơ Bản Website (Website Essentials)',
+    brain: 'Trung Tâm Kết Nối Bộ Não A.I (AI Brain Hub)',
     projects: 'Danh Sách Website Của Tôi',
     editor: activeProjectName ? `AI Editor: ${activeProjectName}` : 'AI Website Editor',
     history: 'Nhật Ký & Lịch Sử Hoạt Động',
@@ -55,11 +60,21 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Compliance / Fair Use Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-          <ShieldCheck size={14} />
-          <span>Fair Use & Bản Quyền Hợp Pháp</span>
-        </div>
+        {/* Interactive AI Brain Status Chip */}
+        <button
+          onClick={() => onSelectTab?.('brain')}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all cursor-pointer ${
+            currentTab === 'brain'
+              ? 'bg-amber-400/20 text-amber-300 border-amber-400/50 shadow-md shadow-amber-500/20'
+              : 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 border-white/10 hover:border-amber-400/30'
+          }`}
+          title="Bấm để mở Trung Tâm Kết Nối Bộ Não A.I"
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <Brain size={14} className="text-amber-400" />
+          <span className="hidden sm:inline">Bộ Não:</span>
+          <span className="text-amber-300 font-mono text-[11px]">Gemini 3.8 Flash</span>
+        </button>
 
         {/* Quick Create Button */}
         {currentTab !== 'create' && (

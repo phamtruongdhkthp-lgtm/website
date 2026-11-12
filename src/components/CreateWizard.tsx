@@ -29,6 +29,7 @@ import {
   LEVEL_DEFINITIONS,
   extractDomainName,
 } from '../utils/engine';
+import { ESSENTIALS_PRESETS } from '../data/websiteEssentialsPresets';
 
 interface CreateWizardProps {
   initialUrl?: string;
@@ -501,16 +502,51 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({
             </div>
           )}
 
-          {/* STEP 3: Brand Info */}
+          {/* STEP 3: Brand Info & Essentials */}
           {step === 3 && (
             <div className="space-y-6">
-              <div>
-                <h4 className="text-base font-bold text-white mb-1">
-                  Bước 3: Nhập thông tin thương hiệu mới
-                </h4>
-                <p className="text-xs text-slate-300">
-                  Nhập thông tin nhận diện mới để AI tự động thay thế. Các trường có thể bỏ trống nếu muốn AI tự đề xuất.
-                </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h4 className="text-base font-bold text-white mb-1">
+                    Bước 3: Nhập hồ sơ cơ bản & thương hiệu mới
+                  </h4>
+                  <p className="text-xs text-slate-300">
+                    Điền các thông tin cốt lõi để Bộ não AI tự động thiết lập toàn bộ website. Bạn có thể bấm chọn mẫu điền sẵn bên phải.
+                  </p>
+                </div>
+              </div>
+
+              {/* 1-Click Preset Selection */}
+              <div className="p-3.5 rounded-2xl bg-amber-400/5 border border-amber-400/20 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-amber-300 flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-amber-400" />
+                    AI Điền Mẫu Nhanh (1 Click)
+                  </span>
+                  <span className="text-[10px] text-slate-400">Tự động điền đầy đủ mọi thông tin</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {ESSENTIALS_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => {
+                        setBrandInfo((prev) => ({
+                          ...prev,
+                          ...preset.data,
+                        }));
+                      }}
+                      className="px-2.5 py-1.5 rounded-xl bg-white/[0.03] hover:bg-amber-400/15 border border-white/10 hover:border-amber-400/30 text-left transition-all cursor-pointer group"
+                    >
+                      <div className="text-[11px] font-bold text-slate-200 group-hover:text-amber-300 truncate">
+                        {preset.name}
+                      </div>
+                      <div className="text-[9px] text-slate-400 truncate font-mono">
+                        {preset.badge}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -536,7 +572,46 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({
                     value={brandInfo.domain}
                     onChange={(e) => setBrandInfo({ ...brandInfo, domain: e.target.value })}
                     placeholder="VD: luxurytech.vn"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm font-mono"
+                  />
+                </div>
+
+                <div className="md:col-span-2 space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">
+                    Khẩu hiệu / Slogan (Tagline)
+                  </label>
+                  <input
+                    type="text"
+                    value={brandInfo.tagline || ''}
+                    onChange={(e) => setBrandInfo({ ...brandInfo, tagline: e.target.value })}
+                    placeholder="VD: Kiến Tạo Tương Lai Giao Thông Xanh & Đẳng Cấp"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">
+                    Số điện thoại hotline
+                  </label>
+                  <input
+                    type="text"
+                    value={brandInfo.phone}
+                    onChange={(e) => setBrandInfo({ ...brandInfo, phone: e.target.value })}
+                    placeholder="1900 6868 hoặc 0988.123.456"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">
+                    Số Zalo OA / Hotline tư vấn
+                  </label>
+                  <input
+                    type="text"
+                    value={brandInfo.zaloNumber || ''}
+                    onChange={(e) => setBrandInfo({ ...brandInfo, zaloNumber: e.target.value })}
+                    placeholder="0988 123 456"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm font-mono"
                   />
                 </div>
 
@@ -555,13 +630,13 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-300">
-                    Số điện thoại hotline
+                    Nút kêu gọi hành động chính (CTA)
                   </label>
                   <input
                     type="text"
-                    value={brandInfo.phone}
-                    onChange={(e) => setBrandInfo({ ...brandInfo, phone: e.target.value })}
-                    placeholder="1900 6868 hoặc 0988.123.456"
+                    value={brandInfo.primaryCta || ''}
+                    onChange={(e) => setBrandInfo({ ...brandInfo, primaryCta: e.target.value })}
+                    placeholder="VD: Đăng Ký Tư Vấn, Đặt Món Ngay, Dùng Thử 14 Ngày"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm"
                   />
                 </div>
@@ -630,13 +705,13 @@ export const CreateWizard: React.FC<CreateWizardProps> = ({
                     Yêu cầu bổ sung cho AI (Prompt tùy biến)
                   </label>
                   <textarea
-                    rows={3}
+                    rows={2}
                     value={brandInfo.additionalRequirements}
                     onChange={(e) =>
                       setBrandInfo({ ...brandInfo, additionalRequirements: e.target.value })
                     }
                     placeholder="VD: Cần nhấn mạnh tính năng đặt hàng nhanh, thêm nút chat Zalo ở góc màn hình và phong cách tối giản thanh lịch..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm resize-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 focus:outline-none text-white text-sm resize-none"
                   ></textarea>
                 </div>
               </div>

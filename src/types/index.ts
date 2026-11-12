@@ -10,16 +10,38 @@ export interface LevelInfo {
   recommended?: boolean;
 }
 
+export interface CoreProductItem {
+  name: string;
+  price: string;
+  description: string;
+}
+
 export interface BrandInfo {
   businessName: string;
+  tagline?: string;
+  mission?: string;
   domain: string;
   email: string;
   phone: string;
+  zaloNumber?: string;
   address: string;
+  workingHours?: string;
   logoUrl: string;
   primaryColor: string;
   secondaryColor: string;
   industry: string;
+  toneOfVoice?: string;
+  colorMode?: 'dark' | 'light';
+  primaryCta?: string;
+  coreProducts?: CoreProductItem[];
+  keyStrengths?: string[];
+  targetPages?: string[];
+  socialLinks?: {
+    facebook?: string;
+    zalo?: string;
+    tiktok?: string;
+    youtube?: string;
+  };
   additionalRequirements: string;
 }
 
@@ -170,4 +192,24 @@ export interface ActivityLogItem {
   details: string;
   timestamp: string;
   type: 'create' | 'edit' | 'deploy' | 'export' | 'analyze';
+}
+
+export interface AiBrainStatus {
+  connected: boolean;
+  hasApiKey: boolean;
+  model: string;
+  provider: string;
+  status: 'ready' | 'connecting' | 'error';
+  latencyMs: number;
+  mode: 'live_gemini' | 'simulated_neural' | 'fallback_neural';
+  capabilities: string[];
+  lastPing?: string;
+}
+
+export interface AiBrainConfig {
+  selectedModel: 'gemini-3.8-flash' | 'gemini-4-argon' | 'simulated_neural';
+  thinkingLevel: 'low' | 'medium' | 'high';
+  temperature: number;
+  autoSynthesizeCopy: boolean;
+  autoOptimizeCRO: boolean;
 }

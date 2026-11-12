@@ -9,6 +9,8 @@ import {
   Sparkles,
   ExternalLink,
   ChevronRight,
+  Brain,
+  FileCheck2,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -27,6 +29,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItems = [
     { id: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
     { id: 'create', label: 'Tạo website mới', icon: PlusCircle, isHighlight: true },
+    { id: 'essentials', label: 'Hồ sơ cơ bản', icon: FileCheck2, badge: 'AI Ready' },
+    { id: 'brain', label: 'Bộ Não A.I (Brain)', icon: Brain, badge: 'Gemini 3.8', isBrain: true },
     { id: 'projects', label: 'Website của tôi', icon: Globe, count: projectsCount },
     { id: 'editor', label: 'AI Website Editor', icon: Bot, isBeta: true },
     { id: 'history', label: 'Lịch sử hoạt động', icon: History },
@@ -104,6 +108,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {item.count !== undefined && (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-slate-300 font-mono">
                     {item.count}
+                  </span>
+                )}
+                {item.badge && (
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded font-semibold border ${
+                      item.isBrain
+                        ? 'bg-amber-400/20 text-amber-300 border-amber-400/30'
+                        : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                    }`}
+                  >
+                    {item.badge}
                   </span>
                 )}
                 {item.isBeta && (

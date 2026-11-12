@@ -75,4 +75,66 @@ describe('Website Engine Pure Logic Tests', () => {
     assert.equal(updatedProject.name, 'VIETNAM LUXURY');
     assert.equal(updatedProject.brandInfo.businessName, 'VIETNAM LUXURY');
   });
+
+  test('calculateEssentialsCompleteness accurately measures percentage', async () => {
+    const { calculateEssentialsCompleteness, ESSENTIALS_PRESETS } = await import('../src/data/websiteEssentialsPresets.ts');
+    
+    // Empty info
+    const emptyResult = calculateEssentialsCompleteness({});
+    assert.equal(emptyResult.percentage, 0);
+    assert.ok(emptyResult.missingItems.length > 8);
+
+    // Full preset
+    const preset = ESSENTIALS_PRESETS[0];
+    const fullResult = calculateEssentialsCompleteness(preset.data);
+    assert.ok(fullResult.percentage >= 90);
+    assert.equal(fullResult.completedCount >= 10, true);
+  });
+
+  test('buildDefaultSections incorporates tagline, primaryCta, products and USPs', async () => {
+    const { buildDefaultSections } = await import('../src/utils/engine.ts');
+    const blueprint = analyzeWebsiteBlueprint('https://example.com');
+    const sections = buildDefaultSections(
+      {
+        businessName: 'VINFAST E-MOBILITY',
+        tagline: 'Kỷ Nguyên Xe Điện',
+        mission: 'Kiến tạo tương lai xanh bền vững.',
+        domain: 'vinfast.vn',
+        email: 'info@vinfast.vn',
+        phone: '1900 2323',
+        zaloNumber: '0988 888 888',
+        address: 'Hải Phòng',
+        logoUrl: '',
+        primaryColor: '#D4AF37',
+        secondaryColor: '#000000',
+        industry: 'Xe điện',
+        primaryCta: 'Đăng Ký Lái Thử',
+        coreProducts: [
+          { name: 'VF 7 Plus', price: '850.000.000 đ', description: 'SUV Thể Thao' }
+        ],
+        keyStrengths: [
+          'Bảo hành 10 năm chính hãng',
+          'Hệ thống 150.000 cổng sạc'
+        ],
+        additionalRequirements: '',
+      },
+      blueprint,
+      3
+    );
+
+    const hero = sections.find((s) => s.type === 'hero');
+    assert.ok(hero?.content.title.includes('Kỷ Nguyên Xe Điện'));
+    assert.equal(hero?.content.ctaPrimary, 'Đăng Ký Lái Thử');
+
+    const navbar = sections.find((s) => s.type === 'navbar');
+    assert.equal(navbar?.content.ctaText, 'Đăng Ký Lái Thử');
+    assert.equal(navbar?.content.hasZaloWidget, true);
+
+    const features = sections.find((s) => s.type === 'features');
+    assert.ok(features?.content.items.some((i: any) => i.title.includes('Bảo hành 10 năm')));
+
+    const pricing = sections.find((s) => s.type === 'pricing');
+    assert.ok(pricing?.content.plans.some((p: any) => p.name === 'VF 7 Plus'));
+  });
 });
+

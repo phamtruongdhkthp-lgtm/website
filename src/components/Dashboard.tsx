@@ -15,6 +15,8 @@ import {
   ShieldCheck,
   FileCode,
   Download,
+  Brain,
+  FileCheck2,
 } from 'lucide-react';
 import { Project, ReplicationLevel } from '../types';
 import { LEVEL_DEFINITIONS } from '../utils/engine';
@@ -27,6 +29,8 @@ interface DashboardProps {
   onOpenPreview: (project: Project) => void;
   onOpenPublish: (project: Project) => void;
   onExportCode: (project: Project) => void;
+  onNavigateToBrain?: () => void;
+  onNavigateToEssentials?: () => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
@@ -36,6 +40,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onOpenPreview,
   onOpenPublish,
   onExportCode,
+  onNavigateToBrain,
+  onNavigateToEssentials,
 }) => {
   const [quickUrl, setQuickUrl] = useState('');
 
@@ -182,6 +188,77 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
           <div className="text-3xl font-extrabold text-white">42s</div>
           <div className="text-xs text-slate-400 mt-1">Tối ưu kiến trúc Vite & Tailwind</div>
+        </div>
+      </div>
+
+      {/* AI Brain & Website Essentials Quick Action Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Card 1: AI Brain Hub Card */}
+        <div className="glass-panel p-6 rounded-3xl border border-amber-400/20 relative overflow-hidden flex flex-col justify-between group hover:border-amber-400/40 transition-all">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="relative z-10 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/15 text-amber-300 text-xs font-semibold border border-amber-400/25">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <Brain size={13} />
+                BỘ NÃO A.I ĐANG KẾT NỐI
+              </span>
+              <span className="text-[11px] font-mono text-slate-400">Google Gemini 3.8 Flash</span>
+            </div>
+            <h4 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors">
+              Trung Tâm Điều Hành Bộ Não A.I
+            </h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Kiểm tra tình trạng kết nối, độ trễ và thử nghiệm trực tiếp các câu lệnh (prompts) với mô hình Gemini 3.8 Flash & DeepMind trước khi tạo website.
+            </p>
+          </div>
+
+          <div className="relative z-10 mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono">
+              <Zap size={13} className="text-amber-400" />
+              <span>Độ trễ: ~78ms (Sẵn sàng)</span>
+            </div>
+            <button
+              onClick={onNavigateToBrain}
+              className="px-3.5 py-1.5 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/30 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Vào Trung Tâm AI</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
+
+        {/* Card 2: Website Essentials Card */}
+        <div className="glass-panel p-6 rounded-3xl border border-white/10 relative overflow-hidden flex flex-col justify-between group hover:border-white/20 transition-all">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="relative z-10 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 text-xs font-semibold border border-indigo-500/25">
+                <FileCheck2 size={13} />
+                HỒ SƠ CƠ BẢN (ESSENTIALS)
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                AI Ready
+              </span>
+            </div>
+            <h4 className="text-base font-bold text-white group-hover:text-indigo-300 transition-colors">
+              Điền Những Thứ Cơ Bản – Để AI Làm Phần Còn Lại
+            </h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Nhập tên thương hiệu, slogan, hotline Zalo và 3 sản phẩm/dịch vụ cốt lõi. AI sẽ tự động phân bổ layout, viết slogan và xây dựng toàn bộ website.
+            </p>
+          </div>
+
+          <div className="relative z-10 mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400">Hỗ trợ 4 mẫu ngành nghề 1 click</span>
+            <button
+              onClick={onNavigateToEssentials}
+              className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/15 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Điền Hồ Sơ Ngay</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
         </div>
       </div>
 
