@@ -1,0 +1,6 @@
+{
+  "name": "AI Website Builder",
+  "description": "Công cụ tạo và tái tạo website tự động bằng AI từ URL mẫu với 5 cấp độ tùy biến, AI Editor thời gian thực và xuất bản tức thì.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
